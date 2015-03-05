@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-//note, the second half of the table must only be the second transition to each state
-//last column is transition probablity
+/* note, the second half of the table must only be the second transition to each state */
+/* last column is transition probablity */
 static int transurc8[16][6] = {
     {0,          0,          0,          0,          0,          0},
     {1,          4,          0,          1,          0,          0},
@@ -58,7 +58,7 @@ __inline  double maxstar(double a, double b)
     return  max(a,b) + log(1.0+exp(-fabs(a-b)));    
 }
 
-//reg_trellis - does each state have 2 transitions ending there?
+/* reg_trellis - does each state have 2 transitions ending there? */
 void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, double *coded_in3,
         double *uncoded_out, double *coded_out1, double *coded_out2,double *coded_out3,
         int len, int trans[][6], int state_count, int trans_count, int codeword_count,
@@ -76,8 +76,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
     double temp[16];
     int states = state_count;
 
-    //calculate gammas
-    //[16][len];
+    /* calculate gammas */ 
     gammas = (double**) malloc (transc*sizeof(double *));
     for (i = 0; i < transc; i++)
         gammas[i] = (double*) malloc(len*sizeof(double));
@@ -136,7 +135,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
     
     
     
-    //set and initialise memory
+    /* set and initialise memory */
     alphas = (double**) malloc (states*sizeof(double *));
     for (i = 0; i < states; i++)
         alphas[i] = (double*) malloc(len*sizeof(double));
@@ -158,7 +157,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
     
     
     
-    //forward recursion (alphas)
+    /* forward recursion (alphas) */
     alphas[0][0] = 0;        //first state
     for (i = 1; i < states; i++)
         alphas[i][0] = -9000;
@@ -181,11 +180,11 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
     }
     
     
-    //backwards recursion (betas)
-    //double betas[8][len];
+    /* backwards recursion (betas) */
+    /* double betas[8][len]; */
     if (last_state < 1 || last_state > states){
         for (i = 0; i < states; i++)
-            betas[i][len-1] = 0;     //end state unknown
+            betas[i][len-1] = 0;     /* end state unknown */
     }
     else
     {
@@ -251,8 +250,9 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
      * }
      * mexPrintf("\n");
      */
-    //deltas
-    //reuse gammas memory
+	 
+    /* deltas */
+    /* reuse gammas memory */
     for (i = 0; i < transc; i++)
     {
         a = trans[i][0];
@@ -262,7 +262,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
     }
     
     
-    //extrinisic uncoded llr
+    /* extrinisic uncoded llr */
     for (j = 0; j < len; j++)
     {
         set0 = 0;
@@ -293,7 +293,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
     }
     
     
-    //coded llr out
+    /* coded llr out */
     for (j = 0; j < len; j++)
     {
         set0 = 0;
@@ -323,7 +323,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
         coded_out1[j] = p1 - p0 - coded_in1[j];
     }
 	
-	//coded llr out2
+	/* coded llr out2 */
 	if (codeword_count >= 2)
 	{
 		for (j = 0; j < len; j++)
@@ -356,7 +356,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
 		}
 	}
 	
-	//coded llr out3
+	/* coded llr out3 */
 	if (codeword_count >= 3)
 	{
 		for (j = 0; j < len; j++)
@@ -450,8 +450,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
             mxIsComplex(prhs[1])) {
         mexErrMsgIdAndTxt("MyToolbox:arrayProduct:notDouble","Input matrix must be type double.");
     }
-    
-    //df
+   
     
     /* check that number of rows in 1st input argument is 1 */
     
@@ -520,9 +519,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
         }
         
         trans_probs = malloc(mxGetM(prhs[3])*sizeof(double *));
-        //blank_transitions = (int**) malloc (mxGetM(prhs[3])*sizeof(int *));
-        //for (i = 0; i < mxGetM(prhs[3]); i++)
-        //    blank_transitions[i] = (int*) malloc(4*sizeof(int));
         p = mxGetPr(prhs[3]);
          
         for (i=0; i < 2; i++){
@@ -557,7 +553,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 	}
     
     
-    //get pointers
+    /* get pointers */
 	uncoded_in = mxGetPr(prhs[0]);
 	if (codeword_count == 1)
 		coded_in1 = mxGetPr(prhs[1]);
@@ -615,8 +611,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
 		mexErrMsgIdAndTxt("Error","Error code: 5812645");
     
     /* call the computational routine */
-    //arrayProduct(multiplier,inMatrix,outMatrix,(mwSize)ncols);
-    // mexPrintf(input_buf);
     if (strncmp(input_buf,"urc8",5)==0)
     {
         bcjr_decoder(uncoded_in, coded_in1, 0, 0,
@@ -645,10 +639,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
                 uncoded_out, coded_out1, coded_out2, coded_out3, len,blank_transitions,
                 states+1,mxGetM(prhs[3]),codeword_count,0,trans_probs, last_state);
         
-        //for (i = 0; i < mxGetM(prhs[3]); i++){
-        //   free(blank_transitions[i]);
-        //}
-        //free(blank_transitions);
         free(trans_probs);
         
         
@@ -688,7 +678,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 		free(coded_out3);
 	}
 
-    //mexPrintf("%f %f %f %f %f",maxstar(2.4,2.4),maxstar(6.7,8.1), maxstar(3,200), maxstar(-5,-8999), maxstar(-6.7,8.1));
+    /* mexPrintf("%f %f %f %f %f",maxstar(2.4,2.4),maxstar(6.7,8.1), maxstar(3,200), maxstar(-5,-8999), maxstar(-6.7,8.1));*/ 
 }
 
 
