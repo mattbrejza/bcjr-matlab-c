@@ -158,7 +158,7 @@ void bcjr_decoder(double *uncoded_in, double *coded_in1, double *coded_in2, doub
     
     
     /* forward recursion (alphas) */
-    alphas[0][0] = 0;        //first state
+    alphas[0][0] = 0;        /* first state */
     for (i = 1; i < states; i++)
         alphas[i][0] = -9000;
     if (reg_trellis == 0){
