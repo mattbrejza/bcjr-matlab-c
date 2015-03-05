@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <cmath.h>
 /* note, the second half of the table must only be the second transition to each state */
 /* last column is transition probablity */
 static int transurc8[16][6] = {
@@ -52,6 +53,11 @@ static int transurc4[16][6]   =  {
     {4,          2,          0,          0,          0,          0},
     {4,          4,          1,          1,          0,          0}
 };
+
+ #define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a > _b ? _a : _b; })
 
 __inline  double maxstar(double a, double b)
 {    
