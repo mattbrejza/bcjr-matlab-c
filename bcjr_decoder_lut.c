@@ -60,8 +60,24 @@ static int transurc4[16][6]   =  {
      _a > _b ? _a : _b; })
 #endif
 __inline  double maxstar(double a, double b)
-{    
-    return  max(a,b) + log(1.0+exp(-fabs(a-b)));    
+{   
+    double diff = fabs(a-b);
+    double c = 0;
+    if (diff < 0.196)
+        c = 0.65;
+    else if (diff < 0.433)
+        c = 0.55;
+    else if (diff < 0.710)
+        c = 0.45;
+    else if (diff < 1.050)
+        c = 0.35;
+    else if (diff < 1.508)
+        c = 0.25;
+    else if (diff < 2.252)
+        c = 0.15;
+    else if (diff < 4.5)
+        c = 0.05;
+    return  max(a,b) + c; /* + log(1.0+exp(-fabs(a-b)));  */
 }
 
 /* reg_trellis - does each state have 2 transitions ending there? */

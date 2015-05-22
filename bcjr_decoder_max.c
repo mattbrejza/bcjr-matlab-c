@@ -61,7 +61,7 @@ static int transurc4[16][6]   =  {
 #endif
 __inline  double maxstar(double a, double b)
 {    
-    return  max(a,b) + log(1.0+exp(-fabs(a-b)));    
+    return  max(a,b); /* + log(1.0+exp(-fabs(a-b)));  */
 }
 
 /* reg_trellis - does each state have 2 transitions ending there? */

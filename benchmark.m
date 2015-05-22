@@ -46,6 +46,16 @@ trans3 =       [1,          1,          0,          0,          0,           0, 
 [un32,en32] = CC3_decoder_bcjr(zeros(1,1000), inc3);
 
 
+feval('zeta_dist_p1_07_N_10_211')
+vlec_codebook = VLCTable;
+vlec_probs = SymbolProbs;
+vlec_trellis = get_vlec_trellis( vlec_codebook, vlec_probs );
+w_a = randn([1 1000]);
+
+unv1 = vlec_viterbi_decoder(w_a, vlec_trellis);
+unv2 = viterbi_decoder(w_a, vlec_trellis);
+
+
 if (sum(abs(t-h)) + sum(abs(y-g))>0.1)
     error('somethings wrong 2');
 end
@@ -57,6 +67,9 @@ if (sum(sum(abs(un21-un22))) + sum(abs(en21-en22))>0.1)
 end
 if (sum(sum(abs(un31-un32))) + sum(abs(en31-en32))>0.1)
     error('somethings wrong 5');
+end
+if (sum(sum(abs(unv1-unv2)))>0.1)
+    error('somethings wrong 6');
 end
 
 
@@ -137,6 +150,28 @@ for i=1:100
     inu = randn([1 1000]);
 
     [c,d]=bcjr_decoder(zeros(1,1000),inc,'uec',transitions_uec1);
+    
+end
+
+toc
+
+%%%%%%% VLEC codewords
+
+tic
+
+for i=1:100
+    inu = randn([1 1000]);
+    unv1 = vlec_viterbi_decoder(inu, vlec_trellis);
+    
+end
+
+toc
+tic
+
+for i=1:100
+
+    inu = randn([1 1000]);    
+    unv2 = viterbi_decoder(inu, vlec_trellis);
     
 end
 
