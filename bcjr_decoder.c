@@ -465,10 +465,10 @@ void mexFunction( int nlhs, mxArray *plhs[],
     }
     
     len = mxGetN(prhs[0]);
-    if (len < 3)
-        mexErrMsgIdAndTxt("MyToolbox:arrayProduct:notRowVector","Input must be a row vector.");
-    if (mxGetN(prhs[1]) < 3)
-        mexErrMsgIdAndTxt("MyToolbox:arrayProduct:notRowVector","Input must be a row vector.");
+    //if (len < 3)
+    //    mexErrMsgIdAndTxt("MyToolbox:arrayProduct:notRowVector","Input must be a row vector.");
+    //if (mxGetN(prhs[1]) < 3)
+    //    mexErrMsgIdAndTxt("MyToolbox:arrayProduct:notRowVector","Input must be a row vector.");
     if (mxGetN(prhs[0]) != mxGetN(prhs[1]))
         mexErrMsgIdAndTxt("MyToolbox:arrayProduct:notRowVector","Input must be same dimentions.");
     
