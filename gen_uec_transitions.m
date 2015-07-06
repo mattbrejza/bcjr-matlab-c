@@ -8,9 +8,6 @@ r = 2*size(C,1);
 % Determine number of codeword bits
 n = size(C,2);
 
-if (n > 2)
-    error('only works for 2 codeword bit atm');
-end
 
 l=len;
 
