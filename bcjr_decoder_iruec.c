@@ -30,7 +30,7 @@ __inline int round(double d)
 
 typedef int trans_t[][TRAN_LEN];
 
-int* calculate_uec_edge_transitions(int *tran_cur, int states_cur, int trans_cur, int *tran_nxt, int states_nxt, int trans_nxt,  int *trans_out)
+int calculate_uec_edge_transitions(int *tran_cur, int states_cur, int trans_cur, int *tran_nxt, int states_nxt, int trans_nxt,  int *trans_out)
 {
 	int c,max_even,max_odd,outtrans,c1;
 
